@@ -60,22 +60,23 @@ First-time setup for the current project.
 
 ### 1A — Check if already initialized
 
-```powershell
-if (Test-Path "kb/KNOWLEDGE.md") {
-    Write-Host "Brain already initialized. Use /kb learn to update from current project state."
-    exit 0
-}
+Check whether `kb/KNOWLEDGE.md` exists in the current working directory. If it does, print:
+
+```
+Brain already initialized. Use /kb learn to update from current project state.
 ```
 
-If already exists, stop and tell the user.
+Then stop.
 
 ### 1B — Create folder structure
 
-```powershell
-New-Item -ItemType Directory -Force -Path "kb"
-New-Item -ItemType Directory -Force -Path "kb/decisions"
-New-Item -ItemType Directory -Force -Path "kb/sessions"
-New-Item -ItemType Directory -Force -Path "kb/domains"
+Create these directories (use whatever shell fits the platform — `mkdir -p` on macOS/Linux, `New-Item -ItemType Directory -Force` on Windows PowerShell):
+
+```
+kb/
+kb/decisions/
+kb/sessions/
+kb/domains/
 ```
 
 ### 1C — Scan project files
@@ -192,7 +193,7 @@ Run /kb fail <topic> to log something that failed and why.
 
 ### 1E — Register in global Brain index
 
-Update `C:\Users\manic\.claude\kb\KNOWLEDGE.md` — add an entry for this project:
+Update `~/.claude/kb/KNOWLEDGE.md` (create the file and its parent directory if they don't exist yet) — add an entry for this project:
 ```markdown
 | [{project name}]({absolute path to kb/KNOWLEDGE.md}) | {stack} | {today} |
 ```
@@ -229,7 +230,7 @@ Read these files in order (skip missing ones):
 
 ### 2B — Write brain dump
 
-Create `kb/sessions/{YYYY-MM-DD}.md`:
+Create `kb/sessions/{YYYY-MM-DD}.md`. If that file already exists (an earlier session today already dumped), do NOT overwrite it — append a separator line `---` followed by a new `# Session Brain Dump — {today} {HH:MM}` section with the same structure below:
 
 ```markdown
 ---
@@ -402,7 +403,7 @@ Read `kb/KNOWLEDGE.md`. Print the doc table plus:
 
 Register/update current project in global Brain:
 
-Read `C:\Users\manic\.claude\kb\KNOWLEDGE.md`.
+Read `~/.claude/kb/KNOWLEDGE.md` (create the file and its parent directory if they don't exist yet).
 Find existing entry for this project path (if any).
 Update or add:
 - Project name
