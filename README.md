@@ -6,11 +6,11 @@ A growing collection of [Claude Code](https://claude.com/claude-code) / [Copilot
 
 | Skill | Trigger | Install | What it does |
 |-------|---------|---------|---------------|
-| [`kb`](plugins/kb/skills/kb/SKILL.md) | `/kb` | `/plugin install kb@skillforge` or `install-kb.sh` | **The Brain** — a persistent, structured knowledge base per project. Tracks architecture, code patterns, anti-patterns, decisions (ADRs), and session-by-session brain dumps, so Claude never starts from zero on a project it has seen before. |
+| [`kb`](plugins/kb/skills/kb/SKILL.md) (knowledge base) | `/kb` | `/plugin install kb@skillforge` or `install-kb.sh` | **The Brain** — a persistent, structured knowledge base per project. Tracks architecture, code patterns, anti-patterns, decisions (ADRs), and session-by-session brain dumps, so Claude never starts from zero on a project it has seen before. |
 
 More skills will be added here over time, each with its own row, its own entry in `plugins/`, and its own `install-<skill>.sh` / `install-<skill>.ps1`. See [CONTRIBUTING.md](CONTRIBUTING.md) if you want to add one.
 
-## Install `kb`
+## Install `kb` (knowledge base)
 
 ### Claude Code (plugin marketplace)
 
@@ -39,7 +39,7 @@ Flags: `--claude-only`, `--copilot-only`, `--dir <path>` (target repo for the Co
 
 By default the skill responds to the `/kb` slash command. If you also want it to trigger on bare `kb`, `hey kb`, etc., and to silently auto-load the Brain index at the start of every session, copy the snippet in [`plugins/kb/skills/kb/CLAUDE-snippet.md`](plugins/kb/skills/kb/CLAUDE-snippet.md) into your personal `~/.claude/CLAUDE.md`. This is opt-in and lives in your own instructions, not the shared plugin, since it changes global session behavior.
 
-## Using `/kb`
+## Using `/kb` (knowledge base)
 
 ### Quickstart
 
