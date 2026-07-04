@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "skillforge",
+  "description": "Growing collection of Claude Code skills, each independently installable. Starts with kb (The Brain) — a persistent, cross-session knowledge base.",
+  "owner": {
+    "name": "Manichandra438",
+    "url": "https://github.com/Manichandra438"
+  },
+  "plugins": [
+    {
+      "name": "kb",
+      "description": "The Brain — persistent knowledge base across all projects.",
+      "source": "./plugins/kb",
+      "category": "productivity"
+    }
+  ]
+}
