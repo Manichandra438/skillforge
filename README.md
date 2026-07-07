@@ -98,6 +98,8 @@ A global index at `~/.claude/kb/KNOWLEDGE.md` tracks every project that has run 
 ```
 .claude-plugin/
   marketplace.json         # marketplace manifest — lists each skill as its own plugin
+docs/
+  ENGINEERING_GUIDELINES.md # language-agnostic engineering standards
 plugins/
   kb/
     .claude-plugin/
@@ -111,6 +113,10 @@ install-kb.ps1               # one-line installer (PowerShell) — kb only
 ```
 
 Future skills follow the same pattern: `plugins/<skill>/`, a new entry in `marketplace.json`, and their own `install-<skill>.sh` / `.ps1`.
+
+## Docs
+
+- [`docs/ENGINEERING_GUIDELINES.md`](docs/ENGINEERING_GUIDELINES.md) — language-agnostic engineering standards (architecture, testing, security, git, review, etc.). Reference it from a project's `CLAUDE.md` so Claude follows it when writing or reviewing code.
 
 ## License
 
