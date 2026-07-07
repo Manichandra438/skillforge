@@ -1,0 +1,9 @@
+{
+  "name": "guideline-review",
+  "version": "0.1.0",
+  "description": "Reviews a repo against docs/ENGINEERING_GUIDELINES.md, writes a severity-ranked report, and fixes only what you approve.",
+  "author": {
+    "name": "Manichandra438",
+    "url": "https://github.com/Manichandra438"
+  }
+}

@@ -12,6 +12,12 @@
       "description": "The Brain — persistent knowledge base across all projects.",
       "source": "./plugins/kb",
       "category": "productivity"
+    },
+    {
+      "name": "guideline-review",
+      "description": "Reviews a repo against docs/ENGINEERING_GUIDELINES.md, writes a severity-ranked report, and fixes only what you approve.",
+      "source": "./plugins/guideline-review",
+      "category": "productivity"
     }
   ]
 }

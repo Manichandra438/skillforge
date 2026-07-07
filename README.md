@@ -2,11 +2,24 @@
 
 A growing collection of [Claude Code](https://claude.com/claude-code) / [Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-skills) skills. Each skill is its own independently installable plugin — installing one does not pull in the others.
 
+## Contents
+
+- [Skills included](#skills-included)
+- [Install `kb`](#install-kb-knowledge-base)
+- [Using `/kb`](#using-kb-knowledge-base)
+- [Install `guideline-review`](#install-guideline-review)
+- [Using `/review-guidelines`](#using-review-guidelines)
+- [Docs](#docs)
+- [Repo layout](#repo-layout)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Skills included
 
 | Skill | Trigger | Install | What it does |
 |-------|---------|---------|---------------|
 | [`kb`](plugins/kb/skills/kb/SKILL.md) (knowledge base) | `/kb` | `/plugin install kb@skillforge` or `install-kb.sh` | **The Brain** — a persistent, structured knowledge base per project. Tracks architecture, code patterns, anti-patterns, decisions (ADRs), and session-by-session brain dumps, so Claude never starts from zero on a project it has seen before. |
+| [`guideline-review`](plugins/guideline-review/skills/guideline-review/SKILL.md) | `/review-guidelines` | `/plugin install guideline-review@skillforge` or `install-guideline-review.sh` | Reviews the repo against `docs/ENGINEERING_GUIDELINES.md`, writes a severity-ranked (Critical/Major/Minor) report to `kb/reports/`, asks for approval, then fixes only what's approved. |
 
 More skills will be added here over time, each with its own row, its own entry in `plugins/`, and its own `install-<skill>.sh` / `install-<skill>.ps1`. See [CONTRIBUTING.md](CONTRIBUTING.md) if you want to add one.
 
@@ -19,7 +32,7 @@ More skills will be added here over time, each with its own row, its own entry i
 /plugin install kb@skillforge
 ```
 
-Only `kb` is installed — other skills in this marketplace (once added) need their own `/plugin install <skill>@skillforge`.
+Only `kb` is installed — other skills in this marketplace (like `guideline-review`) need their own `/plugin install <skill>@skillforge`.
 
 ### One-line install (Claude Code + GitHub Copilot CLI)
 
@@ -93,6 +106,52 @@ kb/
 
 A global index at `~/.claude/kb/KNOWLEDGE.md` tracks every project that has run `/kb init` or `/kb sync`, so Claude can find any project's Brain from anywhere. Nothing is written to `kb/` automatically mid-session — every write is triggered by you running one of the commands above.
 
+## Install `guideline-review`
+
+### Claude Code (plugin marketplace)
+
+```
+/plugin marketplace add Manichandra438/skillforge
+/plugin install guideline-review@skillforge
+```
+
+### One-line install (Claude Code + GitHub Copilot CLI)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Manichandra438/skillforge/main/install-guideline-review.sh | bash
+```
+
+```powershell
+irm https://raw.githubusercontent.com/Manichandra438/skillforge/main/install-guideline-review.ps1 | iex
+```
+
+Same flags as `install-kb.sh`/`.ps1`: `--claude-only`, `--copilot-only`, `--dir <path>` (`-ClaudeOnly`, `-CopilotOnly`, `-Dir` on PowerShell). Only touches `guideline-review` — never installs other skillforge skills.
+
+Requires a `docs/ENGINEERING_GUIDELINES.md` (or `ENGINEERING_GUIDELINES.md` at repo root) in the project being reviewed — this repo's own [`docs/ENGINEERING_GUIDELINES.md`](docs/ENGINEERING_GUIDELINES.md) works as a starting point for any project.
+
+## Using `/review-guidelines`
+
+```
+/review-guidelines
+```
+Scans the repo against the guidelines doc, classifies every finding as **Critical / Major / Minor**, writes `kb/reports/{date}-engineering-review.md`, and posts the summary + finding list in chat — then asks which ones to fix. Nothing is changed until you answer.
+
+Reply however's natural: `fix all`, `fix critical`, `fix C1, M3`, `skip all`. Only the findings you approve get touched; the report file is updated afterward with what was fixed, skipped, or deferred.
+
+Later, without re-running the full scan:
+```
+/review-guidelines fix all              # apply everything still open in the latest report
+/review-guidelines fix critical         # just the Critical tier
+/review-guidelines fix C1,M3            # specific finding IDs
+/review-guidelines list                 # past reports + their status
+```
+
+Reports live in `kb/reports/`, alongside (but separate from) `kb/decisions/`, `kb/sessions/`, and `kb/domains/` from the `kb` skill — see [How the data is organized](#how-the-data-is-organized) above.
+
+## Docs
+
+- [`docs/ENGINEERING_GUIDELINES.md`](docs/ENGINEERING_GUIDELINES.md) — language-agnostic engineering standards (architecture, testing, security, git, review, etc.). Reference it from a project's `CLAUDE.md` so Claude follows it when writing or reviewing code.
+
 ## Repo layout
 
 ```
@@ -108,15 +167,23 @@ plugins/
       kb/
         SKILL.md            # the kb skill definition
         CLAUDE-snippet.md   # optional CLAUDE.md additions (loose triggers + auto-load)
-install-kb.sh               # one-line installer (bash) — kb only
-install-kb.ps1               # one-line installer (PowerShell) — kb only
+  guideline-review/
+    .claude-plugin/
+      plugin.json           # guideline-review's own plugin manifest
+    skills/
+      guideline-review/
+        SKILL.md            # the guideline-review skill definition
+install-kb.sh                       # one-line installer (bash) — kb only
+install-kb.ps1                      # one-line installer (PowerShell) — kb only
+install-guideline-review.sh         # one-line installer (bash) — guideline-review only
+install-guideline-review.ps1        # one-line installer (PowerShell) — guideline-review only
 ```
 
 Future skills follow the same pattern: `plugins/<skill>/`, a new entry in `marketplace.json`, and their own `install-<skill>.sh` / `.ps1`.
 
-## Docs
+## Contributing
 
-- [`docs/ENGINEERING_GUIDELINES.md`](docs/ENGINEERING_GUIDELINES.md) — language-agnostic engineering standards (architecture, testing, security, git, review, etc.). Reference it from a project's `CLAUDE.md` so Claude follows it when writing or reviewing code.
+Adding a new skill? See [CONTRIBUTING.md](CONTRIBUTING.md) for the step-by-step: directory layout, `plugin.json`, `SKILL.md` frontmatter, marketplace registration, installer scripts. PRs adding a self-contained skill are welcome; keep unrelated skills out of the same PR.
 
 ## License
 
